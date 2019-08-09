@@ -1,9 +1,10 @@
+const SecretFile = require('./secretFile.js')
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
 var voiceConnection = null
 
-client.login('NjA5MTk3MjMzODkxNDQyNzE5.XU23dQ.gC56BXiuygCY1Ha9mhsBh-hxD0s');
+client.login(SecretFile.discordToken);
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
