@@ -32,6 +32,11 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     to: channelID,
                     message: 'Does this work?'
                 });
+                voiceChannel.join()
+                .then(connection =>{
+                    const dispatcher = connection.playFile('./50002729.mp3');
+                })
+                .catch(err => console.log(err));
             break;
             // Just add any case commands if you want to..
          }
