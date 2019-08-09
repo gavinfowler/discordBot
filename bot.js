@@ -6,9 +6,10 @@ client.on('ready', () => {
 });
 
 client.on('message', msg => {
+	// console.log(msg.content)
 	const channel = client.channels.get(msg.member.voiceChannelID);
 	if (!channel) return console.error("The channel does not exist!");
-	if (msg.message == 'smdhoes') {
+	if (msg.content == 'smdhoes') {
 		channel.join().then(connection => {
 			// Yay, it worked!
 			let dispatcher = connection.playFile('./audio.mp3')
