@@ -1,27 +1,57 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
+client.login('NjA5MTk3MjMzODkxNDQyNzE5.XU23dQ.gC56BXiuygCY1Ha9mhsBh-hxD0s');
+
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 });
 
 client.on('message', msg => {
-	// console.log(msg.content)
-	const channel = client.channels.get(msg.member.voiceChannelID);
-	if (!channel) return console.error("The channel does not exist!");
-	if (msg.content == 'smdhoes') {
-		channel.join().then(connection => {
-			// Yay, it worked!
-			let dispatcher = connection.playFile('./audio.mp3')
-			dispatcher.on('speaking', (value) => {
-				if (value == false)
-					connection.disconnect()
-			})
-		}).catch(e => {
-			// Oh no, it errored! Let's log it to console :)
-			console.error(e);
-		});
+	if (msg.author.bot == false) {
+		var message = msg.content
+		var beginning = message.substring(0, 2)
+		var command = message.substring(2, message.indexOf(' '))
+		var args = message.substring(message.indexOf(' '))
+		if(command == beginning){
+			command = message.substring(2, message.length)
+			args = null
+		}
+		console.log('-----New-----')
+		console.log(`message: ${message}`)
+		console.log(`beginning: ${beginning}`)
+		console.log(`Command: ${command}`)
+		console.log(`args: ${args}`)
+		if (beginning == "++") {
+			// console.log(msg.channel)
+			// msg.channel.send('hello!')
+			// 	.then(message => console.log(`Sent message: ${message.content}`))
+			// 	.catch(console.error);
+			switch (command) {
+				case 'repeat':
+					msg.channel.send(args)
+						.catch(console.error);
+					break;
+				case 'connect':
+					const channel = client.channels.get(msg.member.voiceChannelID);
+					if (!channel) return console.error("The channel does not exist!");
+					if (msg.content == '++smdhoes') {
+						channel.join().then(connection => {
+							let dispatcher = connection.playFile('./audio.mp3')
+							// this is not working well on heroku.
+							// think about using commands to connect and disconnect
+							dispatcher.on('speaking', (value) => {
+								if (value == false)
+									connection.disconnect()
+							})
+						}).catch(e => {
+							console.error(e);
+						});
+					}
+				default:
+					msg.channel.send('Unknown command.')
+						.catch(console.error);
+			}
+		}
 	}
 });
-
-client.login('NjA5MTk3MjMzODkxNDQyNzE5.XU23dQ.gC56BXiuygCY1Ha9mhsBh-hxD0s');
