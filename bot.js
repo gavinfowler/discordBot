@@ -1,45 +1,25 @@
-var Discord = require('discord.io');
-var logger = require('winston');
-var auth = require('./auth.json');
-// Configure logger settings
-logger.remove(logger.transports.Console);
-logger.add(new logger.transports.Console, {
-    colorize: true
+const Discord = require('discord.js');
+const client = new Discord.Client();
+
+client.on('ready', () => {
+	console.log(`Logged in as ${client.user.tag}!`);
 });
-logger.level = 'debug';
-// Initialize Discord Bot
-var bot = new Discord.Client({
-   token: auth.token,
-   autorun: true
+
+client.on('message', msg => {
+	const channel = client.channels.get(msg.member.voiceChannelID);
+	if (!channel) return console.error("The channel does not exist!");
+	if (msg.message == 'smdhoes') {
+		channel.join().then(connection => {
+			// Yay, it worked!
+			let dispatcher = connection.playFile('./audio.mp3')
+			dispatcher.on('end', () => {
+				connection.disconnect()
+			})
+		}).catch(e => {
+			// Oh no, it errored! Let's log it to console :)
+			console.error(e);
+		});
+	}
 });
-bot.on('ready', function (evt) {
-    logger.info('Connected');
-    logger.info('Logged in as: ');
-    logger.info(bot.username + ' - (' + bot.id + ')');
-});
-var voiceChannel = message.member.voiceChannel;
-bot.on('message', function (user, userID, channelID, message, evt) {
-    // Our bot needs to know if it will execute a command
-    // It will listen for messages that will start with `!`
-    if (message.substring(0, 1) == '!') {
-        var args = message.substring(1).split(' ');
-        var cmd = args[0];
-       
-        args = args.splice(1);
-        switch(cmd) {
-            // !ping
-            case 'ping':
-                bot.sendMessage({
-                    to: channelID,
-                    message: 'Does this work?'
-                });
-                voiceChannel.join()
-                .then(connection =>{
-                    const dispatcher = connection.playFile('./50002729.mp3');
-                })
-                .catch(err => console.log(err));
-            break;
-            // Just add any case commands if you want to..
-         }
-     }
-});
+
+client.login('NjA5MTk3MjMzODkxNDQyNzE5.XU23dQ.gC56BXiuygCY1Ha9mhsBh-hxD0s');
