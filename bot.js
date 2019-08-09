@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
+var voiceConnection = null
+
 client.login('NjA5MTk3MjMzODkxNDQyNzE5.XU23dQ.gC56BXiuygCY1Ha9mhsBh-hxD0s');
 
 client.on('ready', () => {
@@ -22,6 +24,17 @@ function smdhoes(msg, channel) {
 			console.error(e);
 		});
 	}
+}
+
+function connectToVoiceGuild(channel) {
+	if (!channel) return console.error("The channel does not exist!");
+	voiceConnection = channel.join()
+		.then(() => console.log('Connected to voice'))
+}
+
+function disconnectFromVoiceGuild(channel) {
+	if (!channel) return console.error("The channel does not exist!");
+	voiceConnection = channel.leave();
 }
 
 client.on('message', msg => {
@@ -46,15 +59,23 @@ client.on('message', msg => {
 		// msg.channel.send('hello!')
 		// 	.then(message => console.log(`Sent message: ${message.content}`))
 		// 	.catch(console.error);
+		const channel = client.channels.get(msg.member.voiceChannelID);
 		switch (command) {
 			case 'repeat':
 				msg.channel.send(args)
 					.catch(console.error);
 				break;
 			case 'connect':
-				const channel = client.channels.get(msg.member.voiceChannelID);
-				console.log('connecting')
-				smdhoes(msg, channel);
+				console.log('Connecting to voice')
+				connectToVoiceGuild(channel);
+				msg.channel.send('Connected to voice')
+					.catch(console.error);
+				break;
+			case 'disconnect':
+				console.log('Disconnecting From voice')
+				msg.channel.send('Disconnecting')
+					.catch(console.error);
+				disconnectFromVoiceGuild(channel);
 				break;
 			default:
 				msg.channel.send('Unknown command.')
