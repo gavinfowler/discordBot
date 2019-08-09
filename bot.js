@@ -13,8 +13,9 @@ client.on('message', msg => {
 		channel.join().then(connection => {
 			// Yay, it worked!
 			let dispatcher = connection.playFile('./audio.mp3')
-			dispatcher.on('end', () => {
-				connection.disconnect()
+			dispatcher.on('speaking', (value) => {
+				if (value == false)
+					connection.disconnect()
 			})
 		}).catch(e => {
 			// Oh no, it errored! Let's log it to console :)
