@@ -9,9 +9,9 @@ client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 });
 
-function smdhoes(msg, channel) {
+function PlayAudioFile(msg, channel) {
 	if (!channel) return console.error("The channel does not exist!");
-	if (msg.content == '++smdhoes') {
+	if (msg.content == '++play-audio-file') {
 		channel.join().then(connection => {
 			let dispatcher = connection.playFile('./audio.mp3')
 			// this is not working well on heroku.
@@ -50,9 +50,9 @@ client.on('message', msg => {
 			command = message.substring(2, message.length)
 			args = null
 		}
-		console.log('-----New-----')
-		console.log(`message: ${message}`)
-		console.log(`beginning: ${beginning}`)
+		console.log('-----New Command-----')
+		// console.log(`message: ${message}`)
+		// console.log(`beginning: ${beginning}`)
 		console.log(`Command: ${command}`)
 		console.log(`args: ${args}`)
 		// console.log(msg.channel)
